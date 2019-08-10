@@ -178,12 +178,12 @@
         <td class="text-center">
           <a
             href='javascript:editTr({"id":"4","slug":"travel","name":"爱旅行"});'
-            class="btn btn-info btn-xs"
+            class="btn btn-info btn-xs" data-id="{{$value.id}}"
             >编辑</a
           >
           <a
             href="javascript:deleteTr( 4 );"
-            class="btn btn-danger btn-xs"
+            class="btn btn-danger btn-xs" data-id="{{$value.id}}"
             >删除</a
           >
         </td>
@@ -238,7 +238,28 @@
          },
         });
       });
-          
+    //3.删除分类 
+      //-用事件委托 拆除对应的tr
+    $('tbody').on('click','.btn-danger',function(){
+      //3.1 获取data-id属性
+      var id =$(this).data('id');
+      //3.2请求服务端,进行删除操作
+       //获取要操作的tr标签
+       var $tr=$(this).parents('tr');
+       $.post({
+         url:'http://localhost:8000/admin/category_delete',
+         data:{
+           id:id,
+         },
+         success:function(res){
+           console.log(res)
+           //检测是否删除成功
+           if(res.code===200){
+             $tr.remove();
+           };
+         },
+       });
+    });
            
 
     </script>
