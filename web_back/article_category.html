@@ -144,6 +144,9 @@
             <button type="button" class="btn btn-primary" id="model_add">
               新增
             </button>
+            <button type="button" class="btn btn-primary" id="modal_edit">
+                编辑
+              </button>
           </div>
         </div>
       </div>
@@ -252,7 +255,7 @@
            id:id,
          },
          success:function(res){
-           console.log(res)
+          //  console.log(res)
            //检测是否删除成功
            if(res.code===200){
              $tr.remove();
@@ -261,7 +264,54 @@
        });
     });
            
+    //4.编辑分类 
+    //跟删除一样要ongoing事件委托做,因为是动态添加的
+    var id;
+    $('tbody').on('click','.btn-info',function(){
+      //4.1获取data-id属性
+      id =$(this).data('id');
+      //4.2 将当前数据内容填写到对应的输入框中
+      //- .cate_name .cate_slug
+      $('.cate_name').val($(this).parents('tr').children('td').eq(0).text());
+      $('.cate_slug').val($(this).parents('tr').children('td').eq(1).text());
+      
+      //4.3 需要将设置的编辑按钮显示.将新增按钮隐藏
+      //#modal_edit #model_add
+      $('#model_add').addClass('hide');
+      $('#modal_edit').removeClass('hide');
+    });
+    // 因为前面修改了结构,需要给 .btn-add 设置一个显示隐藏的切换
+      $('.btn-add').on('click',function(){
+        $('#modal_edit').addClass('hide');
+        $('#model_add').removeClass('hide');
+      });
+      //4.4 设置点击编辑按钮事件
+      $('#modal_edit').on('click',function(){
+        //检测是否完整填写了表单
+        var nameVal=$('.cate_name').val();
+        var slugVal=$('.cate_slug').val();
+        if(nameVal===''||slugVal===''){
+          alert('请将表单填写完整');
+          return;
+        };
 
+        //发送请求,进行编辑操作
+        $.post({
+          url:'http://localhost:8000/admin/category_edit',
+          data:{
+            name:nameVal,
+            slug:slugVal,
+            id:id,
+          },
+          success:function(res){
+            console.log(res);
+            if(res.code===200){
+              location.reload();
+              //检测是否修改成功 如果修改成功刷新页面重新获取服务端信息
+            }
+          }
+        });
+      });
     </script>
   </body>
 </html>
