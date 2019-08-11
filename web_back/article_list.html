@@ -25,37 +25,36 @@
                 <div class="col-xs-6">
                     <form class="form-inline">
                         <select id="selCategory" name="" class="form-control input-sm">
-                <option value="">所有分类</option>
-              </select>
+              <option value="">所有分类</option>
+            </select>
                         <select id="selStatus" name="" class="form-control input-sm">
-                <option value="">所有状态</option>
-                <option value="草稿">草稿</option>
-                <option value="已发布">已发布</option>
-              </select>
+              <option value="">所有状态</option>
+              <option value="草稿">草稿</option>
+              <option value="已发布">已发布</option>
+            </select>
                         <button type="button" id="btnSearch" class="btn btn-default btn-sm">
-                筛选
-              </button>
+              筛选
+            </button>
                     </form>
                 </div>
                 <div class="col-xs-6">
-                    <a href="article_release.html" class="btn btn-success btn-sm pull-right" id="release_btn">发表文章</a
-            >
-          </div>
-        </div>
+                    <a href="article_release.html" class="btn btn-success btn-sm pull-right" id="release_btn">发表文章</a>
+                </div>
+            </div>
 
-        <table class="table table-striped table-bordered table-hover mp20">
-          <thead>
-            <tr>
-              <th>标题</th>
-              <th>作者</th>
-              <th>分类</th>
-              <th class="text-center">发表时间</th>
-              <th class="text-center">状态</th>
-              <th class="text-center" width="100">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- <tr>
+            <table class="table table-striped table-bordered table-hover mp20">
+                <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>作者</th>
+                        <th>分类</th>
+                        <th class="text-center">发表时间</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center" width="100">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr>
               <td>王积千造统最头</td>
               <td>杰克</td>
               <td>奇趣事</td>
@@ -254,13 +253,13 @@
                 >
               </td>
             </tr> -->
-          </tbody>
-        </table>
+                </tbody>
+            </table>
 
-        <div class="row text-center">
-          <ul class="pagination pagination-sm">
-            <li class="page-item first disabled">
-              <a href="#" class="page-link">首页</a>
+            <div class="row text-center">
+                <ul class="pagination pagination-sm">
+                    <li class="page-item first disabled">
+                        <a href="#" class="page-link">首页</a>
                     </li>
                     <li class="page-item prev disabled">
                         <a href="#" class="page-link">上一页</a>
@@ -280,134 +279,116 @@
                     <li class="page-item last">
                         <a href="#" class="page-link">尾页</a>
                     </li>
-                    </ul>
-                </div>
+                </ul>
             </div>
         </div>
+    </div>
 
-        <script>
-            // 设置左侧菜单
-            $('#release_btn').click(function() {
-                window.parent.setMenu(1, 1)
-            })
-        </script>
-        <!-- 模板引擎导入 -->
-        <script src="./js/template-web.js"></script>
-        <!-- 定义模板 设置文章信息的模板 -->
-        <script type="text/template" id="article">
-            {{each $data}}
-            <tr>
-                <td>{{$value.title}}</td>
-                <td>{{$value.author}}</td>
-                <td>{{$value.type}}</td>
-                <td class="text-center">{{$value.date}}</td>
-
-                <td class="text-center">{{$value.state}}</td>
-
-                <td class="text-center">
-                    <a href="post-edit.html?id=995" class="btn btn-default btn-xs">编辑</a
-              >
-              <a
-                href="javascript:deleteTr( 995 );"
-                class="btn btn-danger btn-xs"
-                >删除</a
-              >
+    <script>
+        // 设置左侧菜单
+        $('#release_btn').click(function() {
+            window.parent.setMenu(1, 1)
+        })
+    </script>
+    <!-- 模板引擎导入 -->
+    <script src="./js/template-web.js"></script>
+    <!-- 定义模板 设置文章信息的模板 -->
+    <script type="text/template" id="article">
+        {{each $data}}
+        <tr>
+            <td>{{$value.title}}</td>
+            <td>{{$value.author}}</td>
+            <td>{{$value.type}}</td>
+            <td class="text-center">{{$value.date}}</td>
+            <td class="text-center">{{$value.state}}</td>
+            <td class="text-center">
+                <a href="post-edit.html?id=1000" class="btn btn-default btn-xs">编辑</a>
+                <a href="javascript:deleteTr( 1000 );" class="btn btn-danger btn-xs">删除</a>
             </td>
-          </tr>
+        </tr>
         {{/each}}
-        </script>
-        <!-- 设置分类下拉裁断选项的模板-->
-        <script type="text/template" id="category">
+    </script>
+    <!-- 设置文章分类下拉菜单选项的模板 -->
+    <script type="text/template" id="category">
         {{each $data}}
         <option value="{{$value.id}}">{{$value.name}}</option>
-        {{/each}}  
-        </script>
-        <script>
-          /*1 请求服务端信息进行基本结构创建
-            2 设置分页功能
-            3  筛选操作*/
+        {{/each}}
+    </script>
+    <script>
+        /*                                                      */
+        //请求数据进行结构生成
+        // - 结构的生成操作除了最开始的需要设置一次以外,分页和筛选都需要重新请求数据
+        // - 一会儿可以封装为函数
+        //    -封装为函数后,先调用一次(生成初始结构)
 
-            //请求数据进行结构生成
-            //-结构的生成操作除了最开始的....
-           
+        // 全局中设置一些初始值方便后续操作
+        var currentPage = 1; //设置当前页号为1
+        var totalPage; //可以不设置默认值 为了能在其他函数中也能使用
+        getArticle(); //打开页面先调用函数展示内容
 
-           //封装函数
-          //- 一打开页面要调用一次函数 取到页面中的初始值 
-          // 全局中设置一些初始值方便后续操作
-          //-设置当前页号
-          var currentPage=1;
-          var totalPage;//可以不设置默认值
-           getArtical();
-          
-          //设置筛选功能
-          //-获取分类信息设置下拉菜单的结构
-          $.get({
-            url:'http://localhost:8000/admin/category_search',
-            success:function(res){
-              console.log(res)
-              if(res.code===200){
-                $('#selCategory').append(template('category',res.data))
-              }
-            }
-          });
-          //给筛选按钮设置时间调用 getArtical()获取最新数据
-          $('#btnSearch').on('click',function(){
-            //将旧的分页结构销毁
-            $('.pagination').twbsPagination('destroy')
-            //再创建新的结构即可
-            getArtical();
-          })
-
-
-           function getArtical(){
-            $.get({
-              url:'http://localhost:8000/admin/search',
-              data:{
-                //需要使用的是4个参数
-                // -type:文章分类 state:文章的状态
-                // -page:当前页号 perpange 要显示几个页号
-                type:$('#selCategory').val(),
-                state:$('#selStatus').val(),
-                perpage:8,//随意设置,一般是10左右
-                page:currentPage//当前要展示的页码
-              },
-              success(res){
+        //设置筛选功能
+        // -获取分类信息设置下拉菜单的结构
+        $.get({
+            url: 'http://localhost:8000/admin/category_search',
+            success: function(res) {
                 // console.log(res)
-                //检测响应的状态
-                if(res.code===200){
-                  //根据数据并根据模板结构
-                  $('tbody').html(template('article',res.data));
-                  //将最新页数设置给总页数
-                   //设置分页功能
-                  totalPage=res.totalPage
-                  $('.pagination').twbsPagination({
-                      totalPages:totalPage,
-                      //总页数
-                      visiblePages:5,
-                      //每次显示多少页码
-                      startPage:1,
-                      //设置当前页
-                      first:'首页',
-                      last:'尾页',
-                      next:'下一页',
-                      prev:'上一页',
-                      //这是点击按钮的内容
-                      onPageClick:function(event,page){
-                        currentPage=page;
-                        //currentPage 修改后再次调用函数,再展示的会是新页的数据
-                        getArtical();
-                      }
-                  });
-                }
-              }
+                if (res.code === 200) {
+                    $('#selCategory').append(template('category', res.data))
+                };
+            },
+        });
+        //给筛选按钮设置事件 调用getArticle(); /获取最新数据
+        $('#btnSearch').on('click', function() {
+            //将旧的分页结构销毁
+            $('.pagination').twbsPagination('destroy');
+            getArticle();
+        })
+
+        //封装函数
+        function getArticle() {
+            $.get({
+                url: 'http://localhost:8000/admin/search',
+                data: {
+                    //需要使用的是4个参数
+                    // -type:文章的分类 state:文章的状态
+                    // -page:当前页号 perpange 要显示的几个页号
+                    type: $('#selCategory').val(),
+                    state: $('#selStatus').val(),
+                    perpage: 8, //随意设置,一般是10左右
+                    page: currentPage //当前要展示的页码
+                },
+                success: function(res) {
+                    console.log(res)
+                        //检测响应的状态
+                    if (res.code === 200) {
+                        //根据数据创建模板结构 并将内容加入到tbody中
+                        $('tbody').html(template('article', res.data));
+
+                        //设置分页功能
+                        //将最新页数设置给总页数
+                        tatalPage = res.totalPage,
+                            $('.pagination').twbsPagination({
+                                totalPages: tatalPage, //总页数
+                                visiblePages: 5, //每次显示多少页码
+                                startPage: 1, //设置起始页
+                                //这是点击按钮的内容
+                                first: '首页',
+                                last: '尾页',
+                                next: '下一页',
+                                prev: '上一页',
+                                onPageClick: function(event, page) {
+                                    currentPage = page;
+                                    //currentPage 修改后再次调用函数,再次展示的会是新页的数据;
+                                    getArticle();
+                                },
+
+                            });
+                    };
+                },
             });
-           
-           }
-          
-        </script>
-      
-       
-      
+        };
+    </script>
+
 
 </body>
 
