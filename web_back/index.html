@@ -188,18 +188,18 @@
     </script>
     <script>
         /*功能分析
-                                                            -1 用户退出登录
-                                                                -用户点击退出按钮可以退回到登录页面
-                                                                 -$('.user_center_link>a').eq(1)
-                                                                - 请求接口,告诉服务端我退出了
-                                                                    -通过模态框设置确认操作
-                                                                        -退出成功,跳转到登录页面
-                                                                        -如果点击取消,不进行跳转
-                                                            -2 用户头像和名称展示
-                                                                -请求接口,获取用户昵称和头像,防止在对应位置展示即可
-                                                                
-                                                                index页面中存在一个iframe标签,内部嵌套了其他页面
-                                                                设置某个页面的功能是,需要修改的是对应页面,而不是index.html*/
+                                                                            -1 用户退出登录
+                                                                                -用户点击退出按钮可以退回到登录页面
+                                                                                 -$('.user_center_link>a').eq(1)
+                                                                                - 请求接口,告诉服务端我退出了
+                                                                                    -通过模态框设置确认操作
+                                                                                        -退出成功,跳转到登录页面
+                                                                                        -如果点击取消,不进行跳转
+                                                                            -2 用户头像和名称展示
+                                                                                -请求接口,获取用户昵称和头像,防止在对应位置展示即可
+                                                                                
+                                                                                index页面中存在一个iframe标签,内部嵌套了其他页面
+                                                                                设置某个页面的功能是,需要修改的是对应页面,而不是index.html*/
         $('.user_center_link>a').eq(1).on('click', function() {
             //设置模态框进行确认
             $('#myModal').modal();
@@ -215,6 +215,19 @@
                     location.href = 'login.html';
                 },
             });
+        });
+
+        //请求数据
+        $.get({
+            url: 'http://localhost:8000/admin/getuser',
+            success: function(res) {
+                //检测响应是否成功
+                if (res.code === 200) {
+                    //将图片设置给两个展示区域
+                    $('.user_center_link img,.user_info img').css('src', res.data.user_pic);
+                    $('.user_info i').text(res.data.nickname)
+                };
+            },
         });
     </script>
 </body>
