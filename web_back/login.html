@@ -39,7 +39,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">提示!!!</h4>
                 </div>
                 <div class="modal-body">
@@ -58,23 +59,25 @@
     <script src="./js/bootstrap/js/bootstrap.min.js"></script>
     <script>
         /*功能分析:
-                                对输入框的内容进行检测,不能为空,如果为空进行提示
-                                - .input_txt .input_pass
-                                将用户名和密码发送给接口进行检测 .input_sub
-                                -登录成功 ,跳转到'index.html'
-                                -登录失败提示用户 清空密码  */
+                                        对输入框的内容进行检测,不能为空,如果为空进行提示
+                                        .input_txt .input_pass 
+                                        点击登录按钮以后 .input_sub
+                                        将用户名和密码发送给服务端进行检测
+                                        -登录成功,(admin 123456)跳转到'index.html'
+                                        -登录失败用模态框提示用户 清空密码*/
 
         $('.input_sub').on('click', function(e) {
+            // 阻止默认的提交
             e.preventDefault();
-            //取消登录按钮submit的默认行为
+
+            // 检测内容是否为空(失败检测)
             if ($('.input_txt').val() === '' || $('.input_pass').val() === '') {
-                //通过设置的模态框将提示信息进行展示
-                //修改模态框的按钮内容
-                $('.modal-body').text('请将用户名和密码填写完整');
+                //通过设置的模态框将提示信息展示
+                $('.modal-body').text('内容没有填写完毕');
                 $('#myModal').modal();
                 return;
             };
-            //将用户名和密码提交给服务端检测是否能登录
+            //将用户名和密码提交给服务端进行检测
             $.post({
                 url: 'http://localhost:8000/admin/login',
                 data: {
@@ -83,16 +86,15 @@
                 },
                 success: function(res) {
                     if (res.code === 200) {
-                        location.href = 'index.html';
+                        location.href = 'index.html'
                     } else if (res.code === 400) {
-                        //通过模态框进行提示用户
+                        //通过模态框显示提示信息
                         $('.modal-body').text('用户名或密码错误');
                         $('#myModal').modal();
                         $('.input_pass').val('');
-
-                    }
-                }
-            })
+                    };
+                },
+            });
         });
     </script>
 
